@@ -1,5 +1,4 @@
-name: EKS-cluster-deployment
-
+name: s3-statefile in Dynamo
 on:
   workflow_dispatch:
   
