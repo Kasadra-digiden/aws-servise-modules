@@ -61,7 +61,7 @@ module "kms" {
   description             = "EKS encryption key"
   deletion_window_in_days = 7
   enable_key_rotation     = true
-  aliases_name            = "alias/eks-secrets"
+  aliases_name            = "alias/eks-secret-tf"
   role_name               = "eks-kms-user-role"
   key_policy_name         = "eks-kms-policy"
   Policy_description      = "Allows EKS to use KMS key"
@@ -167,6 +167,7 @@ resource "aws_eks_node_group" "default" {
 # }
 #
 #
+
 
 
 
