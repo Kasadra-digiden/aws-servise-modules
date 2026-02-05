@@ -2,7 +2,7 @@
 # VPC MODULE
 ########################################################
 module "vpc" {
-  source = "git::https://github.com/Kasadra-Digidense/aws_services_modules.git//Modules/VPC?ref=main"
+  source = "git::https://github.com/Kasadra-digiden/aws_services_modules.git//Modules/VPC?ref=main"
 
   vpc_cidr        = var.vpc_cidr
   vpc_tag         = var.vpc_tag
@@ -13,7 +13,7 @@ module "vpc" {
 }
 
 module "pub_sg" {
-  source = "git::https://github.com/Kasadra-Digidense/aws_services_modules.git//Modules/Security_Group?ref=main"
+  source = "git::https://github.com/Kasadra-digiden/aws_services_modules.git//Modules/Security_Group?ref=main"
 
   name        = "pub-sg"
   description = "Public Security Group"
@@ -56,7 +56,7 @@ module "pub_sg" {
 # KMS MODULE
 ########################################################
 module "kms" {
-  source = "git::https://github.com/Kasadra-Digidense/aws_services_modules.git//Modules/KMS/modules/kms?ref=main"
+  source = "git::https://github.com/Kasadra-digiden/aws_services_modules.git//Modules/KMS/modules/kms?ref=main"
 
   description             = "EKS encryption key"
   deletion_window_in_days = 7
@@ -73,7 +73,7 @@ module "kms" {
 # IAM MODULES
 ########################################################
 module "eks_iam" {
-  source       = "git::https://github.com/Kasadra-Digidense/aws_services_modules.git//Modules/IAM/modules/iam-roles?ref=main"
+  source       = "git::https://github.com/Kasadra-digiden/aws_services_modules.git//Modules/IAM/modules/iam-roles?ref=main"
   project_name = "eks"
 
 }
@@ -82,7 +82,7 @@ module "eks_iam" {
 # WAF
 ########################################################
 module "waf" {
-  source              = "git::https://github.com/Kasadra-Digidense/aws_services_modules.git//Modules/waf?ref=main"
+  source              = "git::https://github.com/Kasadra-digiden/aws_services_modules.git//Modules/waf?ref=main"
   aws_region          = var.aws_region
   scope               = var.scope
   web_acl_name        = var.web_acl_name
@@ -167,6 +167,7 @@ resource "aws_eks_node_group" "default" {
 # }
 #
 #
+
 
 
 
