@@ -1,30 +1,24 @@
 name: Terraform Deploy EKS
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  terraform-eks:
-    name: Terraform Apply EKS
+  terraform-backend:
+    name: Terraform Apply S3 Backend
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout EKS repo
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # 2️⃣ Allow Terraform to clone PRIVATE module repo
-      - name: Configure GitHub auth for private Terraform modules
-        run: |
-          git config --global url."https://${{ secrets.MY_GITHUB_TOKEN }}@github.com/".insteadOf "https://github.com/"
-
-      # 3️⃣ Setup Terraform
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.0
 
-      # 4️⃣ Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -32,29 +26,51 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # 5️⃣ Terraform Init (force clean + upgrade)
-      - name: Terraform Init
-        run: |
-          rm -rf .terraform .terraform.lock.hcl
-          terraform init -upgrade -reconfigure
+      # - name: Terraform Init (S3 Backend)
+      #   run: terraform init
+      #   working-directory: Dev/s3-backend
+
+      # - name: Terraform Validate (S3 Backend)
+      #   run: terraform validate
+      #   working-directory: Dev/s3-backend
+
+      # - name: Terraform Apply (S3 Backend)
+      #   run: terraform apply -auto-approve
+      #   working-directory: Dev/s3-backend
+
+  terraform-eks:
+    name: Terraform Apply EKS
+    runs-on: ubuntu-latest
+    needs: terraform-backend   
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Terraform Init (EKS)
+        run: terraform init -migrate-state
         working-directory: Dev/EKS_Cluster_deployment
 
-      # 6️⃣ Terraform Format
-      - name: Terraform Format
-        run: terraform fmt -check
-        working-directory: Dev/EKS_Cluster_deployment
-
-      # 7️⃣ Terraform Validate
-      - name: Terraform Validate
+      - name: Terraform Validate (EKS)
         run: terraform validate
         working-directory: Dev/EKS_Cluster_deployment
 
-      # 8️⃣ Terraform Plan
-      - name: Terraform Plan
+      - name: Terraform Plan (EKS)
         run: terraform plan -out=tfplan
         working-directory: Dev/EKS_Cluster_deployment
 
-      # 9️⃣ Terraform Apply
-      - name: Terraform Apply
+      - name: Terraform Apply (EKS)
         run: terraform apply -auto-approve tfplan
         working-directory: Dev/EKS_Cluster_deployment
