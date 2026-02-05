@@ -24,7 +24,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Terraform Init (Upgrade)
-        run: terraform init -upgrade -reconfigure
+        run: terraform init 
         working-directory: Dev/EKS_Cluster_deployment
 
       - name: Terraform Format
