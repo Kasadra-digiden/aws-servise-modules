@@ -1,5 +1,4 @@
-name: Terraform Deploy EKS (Node Group Only)
-
+name: Terraform Deploy EKS 
 on:
   workflow_dispatch:
 
