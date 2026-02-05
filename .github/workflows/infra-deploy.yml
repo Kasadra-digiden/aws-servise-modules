@@ -59,9 +59,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # - name: Terraform Init (EKS)
-      #   run: terraform init -migrate-state
-      #   working-directory: Dev/EKS_Cluster_deployment
+      - name: Terraform Init (EKS)
+        run: terraform init -migrate-state
+        working-directory: Dev/EKS_Cluster_deployment
 
       - name: Terraform Validate (EKS)
         run: terraform validate
