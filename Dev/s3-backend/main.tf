@@ -12,7 +12,7 @@ resource "aws_kms_key" "tf_state" {
 }
 
 resource "aws_kms_alias" "tf_state" {
-  name          = "alias/terraform-state-tf"
+  name          = "alias/terraform-state-tfw"
   target_key_id = aws_kms_key.tf_state.key_id
 }
 
@@ -66,6 +66,7 @@ resource "aws_dynamodb_table" "tf_lock" {
     type = "S"
   }
 }
+
 
 
 
